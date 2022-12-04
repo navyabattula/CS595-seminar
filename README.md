@@ -18,11 +18,11 @@ Recent works in learned optimizers involve designing algorithms that learn via n
 
 They express that their model is better for the following reasons:
 
-First, it is able to rapidly train neural networks from unseen initializations with just one parameter update (Figure 3). 
-Second, it can generate parameters that achieve a wide range of prompted losses, errors and returns (Figure 5).
-Third, it is able to generalize to out-of-distribution weight initialization algorithms (Figure 6). 
-Fourth, as a generative model, it is able to sample diverse solutions (Figure 8). 
-Finally, it can optimize non-differentiable objectives, such as RL returns or classification errors.
+1. It is able to rapidly train neural networks from unseen initializations with just one parameter update. 
+2. It can generate parameters that achieve a wide range of prompted losses, errors and returns.
+3. It is able to generalize to out-of-distribution weight initialization algorithms. 
+4. As a generative model, it is able to sample diverse solutions. 
+5. It can optimize non-differentiable objectives, such as RL returns or classification errors.
 
 ## Generative pre training for neural checkpoint
 
