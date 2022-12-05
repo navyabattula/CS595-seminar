@@ -24,12 +24,10 @@ They express that their model is better for the following reasons:
 4. As a generative model, it is able to sample diverse solutions. 
 5. It can optimize non-differentiable objectives, such as RL returns or classification errors.
 
-## Generative pre training for neural checkpoint
 
 ### Dataset for neural network checkpoints
 
-
-
-
+The authors create the checkpoint dataset for the neural network training. They run optimizers like Adam and SGD and generate parameters and record various checkpoints. These checkpoints are augumented to the actual dataset to enable learned optimizer functioning.  Given a checkpoint (θ, l), we
+construct augmented tuples (T (θ), l), where T (·) is the parameter-level augmentation. For creating a checkpoint (θ, l), they use a parameter level augumentation T(.) and for them to be valid, they need a fucntion fT (θ)(x) = fθ(x). They make use of permutation augumentation for this pupose. 
 
 
