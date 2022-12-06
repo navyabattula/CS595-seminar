@@ -13,17 +13,9 @@ Paper: [Learning to Learn with Generative Models of Neural Network Checkpoints](
 
 Code: https://github.com/wpeebles/G.pt
 
-## Overview
+## Introduction
 
-Recent works in learned optimizers involve designing algorithms that learn via nested meta-optimization, where the inner loop optimizes the task-level objective and the outer loop learns the optimizer. However there are some issues employing these techniques because of the reliance on unrolled optimization and reinforcement learning component. The authors of this paper refer back to the concept of using checkpoints explored in the community and argue that these checkpoints contain rich information about parameters, metrics, losses and errors. They propose the use of checkpoint datasets instead of large chunk of datasets. The authors have created a dataset consisting of these checkpoints using standard daatsets like CIFAR, MNIST and Cartpole as part of this research. They claim to have included 23 million checkpoints within this dataset. The authors specifically explored generative pre training directly in the parameter space and employed transformer-based diffusion models of neural network parameters. They claim that their generative modelling technique is better compared to the unrolled optimization and reinforcement learning explored by previous works. 
-
-They express that their model is better for the following reasons:
-
-1. It is able to rapidly train neural networks from unseen initializations with just one parameter update. 
-2. It can generate parameters that achieve a wide range of prompted losses, errors and returns.
-3. It is able to generalize to out-of-distribution weight initialization algorithms. 
-4. As a generative model, it is able to sample diverse solutions. 
-5. It can optimize non-differentiable objectives, such as RL returns or classification errors.
+Recent works in learned optimizers involve designing algorithms that learn via nested meta-optimization, where the inner loop optimizes the task-level objective and the outer loop learns the optimizer. However there are some issues employing these techniques because of the reliance on unrolled optimization and reinforcement learning component. The authors of this paper refer back to the concept of using checkpoints explored in the community and argue that these checkpoints contain rich information about parameters, metrics, losses and errors. They propose the use of checkpoint datasets instead of large chunk of datasets. The authors have created a dataset consisting of these checkpoints using standard daatsets like CIFAR, MNIST and Cartpole as part of this research. They claim to have included 23 million checkpoints within this dataset. The authors specifically explored generative pre training directly in the parameter space and employed transformer-based diffusion models of neural network parameters. 
 
 
 ### Dataset for neural network checkpoints
@@ -42,4 +34,13 @@ The generative diffusion model is a tranformer model and the authors employ the 
 
 
 
+## Why G.pt is efficient than other approaches in the community
+
+The paper explores a new direction of utilizing the checkpoint datasets that enable learned optimizer that could effectively learn about the model something everytime it runs through the dataset unlike Adam and SGD optimizers. This paper proposes a simple, scalable and data driven approach which instead of relying on large datasets, makes use of checkpoint datasets unlike other models which tend to rely on unrolled optimizations that could be costly. The following reasons explain why G.pt is most suited for this application. 
+
+1. It is able to rapidly train neural networks from unseen initializations with just one parameter update. 
+2. It can generate parameters that achieve a wide range of prompted losses, errors and returns.
+3. It is able to generalize to out-of-distribution weight initialization algorithms. 
+4. As a generative model, it is able to sample diverse solutions. 
+5. It can optimize non-differentiable objectives, such as RL returns or classification errors.
 
