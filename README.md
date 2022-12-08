@@ -54,6 +54,13 @@ As mentioned earlier, G.pt performs better than other optimizers only with a sin
 
 By prompting for various desired losses, errors, or returns, G.pt can sample different parameter updates that achieve a range of performance levels. Figure 5 shows that G.pt successfully learns to generate parameters corresponding to a large range of prompted values.  Across different tasks and metrics, G.pt generates parameter updates that are well-correlated with the prompted value. While the model is able to achieve a range of prompted values, it is noted that it currently shows limited ability to extrapolate to values beyond the limits of the pre-training dataset.
 
+The networks in the checkpoint dataset are initialized with a single weight initialization scheme. For MNIST, they are sampled θ ∼ U[− 1/√n, 1/√n], where n is the fan-in of a layer.  While one step prompting performance is degraded, recursive promptingsignificantly improves results. G.pt is able to rapidly optimize out-of-distribution weights in ten or fewer parameter updates. Figure 6 shows evaluation of G.pts ability to generalize to randomly-initialized input parameter vectors θ, where the weights are sampled from different distributions.
+
+The effect of increasing the G.pt parameters is shown in Figure 7.  The training process invloves six models withtransformer hidden sizes in [64, 128, 256, 512, 1024, 2048]. The smallest model is approximately 2M parameters while the largestis 858M parameters. The G.pt checkpoint that attains the highest prompt alignment score over training is evaluated. We can infer that the larger models generalize much more effectively than smaller models. Small models (<60M parameters) largely fail to generalizeto unseen parameter vectors. Even at roughly 109 parameters, wefind that G.pt has not saturated its model scaling curve.
+
+The impact of increasing the number of training checkpoints in also investigated (figure 7). The largest 858M parameter model is trained on [500, 5K, 10K, 25K, 55K] runs, with each run containing 200 checkpoints. Performance improves substantially as the number of training checkpoints is scaled from
+100K to 5M. There is no significant improvement when further increasing from 5M to 10M checkpoints. This may be a result of G.pt requiring additional model scale to benefit from a larger pre-training dataset.
+
 ![](./Figure3.png)
 
 Figure 3: Figure showing the reduction of losses and errors for each optimizer after a single update.
@@ -65,3 +72,11 @@ Figure 4: Figure showing the reduction of losses and errors for proposed optimiz
 ![](./Figure5.png)
 
 Figure 5: Figure showing achieved losses, errors and returns across a range of inputs G.pt prompts. Each blue curve corresponds to a different randomly-initialized input parameter vector.
+
+![](./Figure6.png)
+
+Figure 6: Error shown by G.pt in different distributions.
+
+![](./Figure7.png)
+
+Figure 7: Figure showing the Scaling of the model wrt parameter size and data size. 
