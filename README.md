@@ -56,10 +56,12 @@ By prompting for various desired losses, errors, or returns, G.pt can sample dif
 
 The networks in the checkpoint dataset are initialized with a single weight initialization scheme. For MNIST, they are sampled θ ∼ U[− 1/√n, 1/√n], where n is the fan-in of a layer.  While one step prompting performance is degraded, recursive promptingsignificantly improves results. G.pt is able to rapidly optimize out-of-distribution weights in ten or fewer parameter updates. Figure 6 shows evaluation of G.pts ability to generalize to randomly-initialized input parameter vectors θ, where the weights are sampled from different distributions.
 
-The effect of increasing the G.pt parameters is shown in Figure 7.  The training process invloves six models withtransformer hidden sizes in [64, 128, 256, 512, 1024, 2048]. The smallest model is approximately 2M parameters while the largestis 858M parameters. The G.pt checkpoint that attains the highest prompt alignment score over training is evaluated. We can infer that the larger models generalize much more effectively than smaller models. Small models (<60M parameters) largely fail to generalizeto unseen parameter vectors. Even at roughly 109 parameters, wefind that G.pt has not saturated its model scaling curve.
+The effect of increasing the G.pt parameters is shown in Figure 7.  The training process invloves six models withtransformer hidden sizes in \[64, 128, 256, 512, 1024, 2048\]. The smallest model is approximately 2M parameters while the largestis 858M parameters. The G.pt checkpoint that attains the highest prompt alignment score over training is evaluated. We can infer that the larger models generalize much more effectively than smaller models. Small models (<60M parameters) largely fail to generalizeto unseen parameter vectors. Even at roughly 109 parameters, wefind that G.pt has not saturated its model scaling curve.
 
-The impact of increasing the number of training checkpoints in also investigated (figure 7). The largest 858M parameter model is trained on [500, 5K, 10K, 25K, 55K] runs, with each run containing 200 checkpoints. Performance improves substantially as the number of training checkpoints is scaled from
+The impact of increasing the number of training checkpoints in also investigated (figure 7). The largest 858M parameter model is trained on \[500, 5K, 10K, 25K, 55K\] runs, with each run containing 200 checkpoints. Performance improves substantially as the number of training checkpoints is scaled from
 100K to 5M. There is no significant improvement when further increasing from 5M to 10M checkpoints. This may be a result of G.pt requiring additional model scale to benefit from a larger pre-training dataset.
+
+The mapping of loss values to neural network parameters is one-to-many. As a generative model, G.pt is able to sample diverse parameter solutions given a loss prompt \[Figure 8\]. Visual inspection of generated first-layer weights suggests that sampling noise controls subtle variations in individual filters as well as the specific ordering of filters. Intuitively, conditioning on a starting θ should narrow the space of possible parameter solutions (in other words, initialization should have some bearing on where optimization converge). 
 
 ![](./Figure3.png)
 
@@ -80,3 +82,7 @@ Figure 6: Error shown by G.pt in different distributions.
 ![](./Figure7.png)
 
 Figure 7: Figure showing the Scaling of the model wrt parameter size and data size. 
+
+![](./Figure8.png)
+
+Figure 8: Visualization of the test error landscape for an MNIST MLP via parameter space PCA directions
