@@ -56,7 +56,7 @@ As mentioned earlier, G.pt performs better than other optimizers only with a sin
 
 Figure 3: Figure showing the reduction of losses and errors for each optimizer after a single update.
 
-![](./Figure3.png)
+![](./Figure4.png)
 
 Figure 4: Figure showing the reduction of losses and errors for proposed optimizer (single step) vs other optimizers (thousands of steps)
 
