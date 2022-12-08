@@ -50,3 +50,8 @@ The paper explores a new direction of utilizing the checkpoint datasets that ena
 4. As a generative model, it is able to sample diverse solutions. 
 5. It can optimize non-differentiable objectives, such as RL returns or classification errors.
 
+As mentioned earlier, G.pt performs better than other optimizers only with a single update. Optimizers like Adam and SGD require hundreds or even thousands of updates to achieve this. The results shown in Figure 3 show the sharp distinction between these optimizers in terms of their efficiency in the first step update. 
+
+![](./Figure3.png)
+
+Figure 3: Figure showing the reduction of losses and errors for each optimizer after a single update.
