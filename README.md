@@ -52,6 +52,8 @@ The paper explores a new direction of utilizing the checkpoint datasets that ena
 
 As mentioned earlier, G.pt performs better than other optimizers only with a single update. Optimizers like Adam and SGD require hundreds or even thousands of updates to achieve this. The results shown in Figure 3 show the sharp distinction between these optimizers in terms of their efficiency in the first step update. Now a single step comparision between these optimizers might not be a fair baseline for comparision. Therefore, the author explain that their model still performs well in a single step vs thousands of steps on other optimizers as shown in Figure 4.
 
+By prompting for various desired losses, errors, or returns, G.pt can sample different parameter updates that achieve a range of performance levels. Figure 5 shows that G.pt successfully learns to generate parameters corresponding to a large range of prompted values.  Across different tasks and metrics, G.pt generates parameter updates that are well-correlated with the prompted value. While the model is able to achieve a range of prompted values, it is noted that it currently shows limited ability to extrapolate to values beyond the limits of the pre-training dataset.
+
 ![](./Figure3.png)
 
 Figure 3: Figure showing the reduction of losses and errors for each optimizer after a single update.
@@ -60,3 +62,6 @@ Figure 3: Figure showing the reduction of losses and errors for each optimizer a
 
 Figure 4: Figure showing the reduction of losses and errors for proposed optimizer (single step) vs other optimizers (thousands of steps)
 
+![](./Figure5.png)
+
+Figure 5: Figure showing achieved losses, errors and returns across a range of inputs G.pt prompts. Each blue curve corresponds to a different randomly-initialized input parameter vector.
