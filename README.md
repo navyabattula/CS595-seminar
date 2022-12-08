@@ -7,7 +7,7 @@ Category: Optimizing neural nets
 ---
 
 
-The general optimizers used to train neural networks like Adam and SGD are very efficeint in doing their job perfectly. They drive the entire learning process by making convergence happen and model pick some patterns from the given data. But they do suffer from an important draw back of not being able to improve based on past experience. By past experience here we mean that running the same model with the same optimizer isn't going to essentially change the how fast the model is converging. With this being said, the exploration for learned optimizers has been in place for a while in the community. This paper explores a work in that particular direction.
+The general optimizers used to train neural networks like Adam and SGD are very efficeint in doing their job perfectly. They drive the entire learning process by making the convergence happen and make model pick some patterns from the given data. But they do suffer from an important draw back of not being able to improve based on past experience. By past experience here we mean that running the same model with the same optimizer isn't going to essentially change the how fast the model is converging. With this being said, the exploration for learned optimizers has been in place for a while in the community. This paper explores a work in that particular direction.
 
 Paper: [Learning to Learn with Generative Models of Neural Network Checkpoints](https://arxiv.org/pdf/2209.12892.pdf) 
 
@@ -21,13 +21,14 @@ Recent works in learned optimizers involve designing algorithms that learn via n
 #### Dataset for neural network checkpoints
 
 The authors create the checkpoint dataset for the neural network training. They run optimizers like Adam and SGD and generate parameters and record various checkpoints. These checkpoints are augumented to the actual dataset to enable learned optimizer functioning.  Given a checkpoint (θ, l), we
-construct augmented tuples (T (θ), l), where T (·) is the parameter-level augmentation. For creating a checkpoint (θ, l), they use a parameter level augumentation T(.) and for them to be valid, they need a fucntion fT (θ)(x) = fθ(x). They make use of permutation augumentation for this pupose. Using thia permutation augumentation, the authors seek to permute the outgoing and incoming weights to preserve the output of the neural network.
+construct augmented tuples (T (θ), l), where T (·) is the parameter-level augmentation. For creating a checkpoint (θ, l), they use a parameter level augumentation T(.) and for them to be valid, they need a fucntion fT (θ)(x) = fθ(x). They make use of permutation augumentation for this pupose. Using this permutation augumentation, the authors seek to permute the outgoing and incoming weights to preserve the output of the neural network.
 
 ![](./Figure1.png)
+Figure 1: The left side showing the checkpoint dataset along with the parameters, losses and errors. The right side showing the G.pt model (diffusion tranformer)
 
 #### Generative model for neural network checkpoints
 
-The authors use the dataset generated above to learn parmaters and create learned optimizer over the dataset. For this they propose a generative model that makes use of diffusion that could learn from these given paramters out of checkpoints. They use this diffusion model to learn the given parameters to generate future parameters (noisy). It will be outputting the (θ', l') set where θ' represents the future parameters and l' represents the prompted loss. The diffusion model attempts the signal over loss prediction and the loss would be denoted by:
+The authors use the dataset generated above to learn parmaters and create learned optimizer over the dataset. For this they propose a generative model that makes use of diffusion that could learn from these given paramters out of checkpoints. They use this diffusion model to learn the given parameters to generate future parameters (noisy). It will be outputting the (θ', l') set where θ' represents the future parameters and l' represents the prompted loss. The θ value and l value represent the input parameter set and loss value of the model. The diffusion model attempts the signal over loss prediction and the loss would be denoted by:
 
                                    L(G) = E[||c' − G(θ'j, θ, l', l, j)||]
                                   
@@ -35,7 +36,9 @@ The generative diffusion model is a tranformer model and the authors employ the 
 
 ![](./Figure2.png)
 
+Figure 2: The model architecture for G.pt. 
 
+For creating the checkpoint dataset, the MNIST dataset is trained on CNN network (2layer convolution and 10 layer MLP) for 25 epochs and the CIFAR dataset is trained on the CNN for 50 epochs with learning rate 0.1, weight decay 5e-4 on SGD with momentum 0.9. The RL Catpole dataset is trained  using the IsaacGym simulator. They use a a three-layer MLP with 32 hidden units and SeLU activations. They make use of exponential moving average (EMA) of G.pt weights over the course of training. Their diffusion transformer uses a hidden dimension between 1536 and 2048 depending on dataset and has 12 hidden layers with 12-16 heads for self-attention. Then they employ learned positional embeddings across all tokens, initialized to zero.
 
 ## Why G.pt is efficient than other approaches in the community
 
