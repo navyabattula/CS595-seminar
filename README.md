@@ -40,6 +40,28 @@ Figure 2: The model architecture for G.pt.
 
 For creating the checkpoint dataset, the MNIST dataset is trained on CNN network (2layer convolution and 10 layer MLP) for 25 epochs and the CIFAR dataset is trained on the CNN for 50 epochs with learning rate 0.1, weight decay 5e-4 on SGD with momentum 0.9. The RL Catpole dataset is trained  using the IsaacGym simulator. They use a a three-layer MLP with 32 hidden units and SeLU activations. They make use of exponential moving average (EMA) of G.pt weights over the course of training. Their diffusion transformer uses a hidden dimension between 1536 and 2048 depending on dataset and has 12 hidden layers with 12-16 heads for self-attention. Then they employ learned positional embeddings across all tokens, initialized to zero.
 
+## What issues other approaches had
+
+#### Learning optimizers
+
+Past works have explored parameterizing optimization update rules withneural networks in place of hand-designed rules like Adam. These rules can be parameterized implicitly as neural networks that take gradients as input and output an improved parameter update. They are typically trained with unrolled optimization or reinforcement learning which made the reliance on these models a little skeptical.
+
+#### Hypernetworks
+
+Rather than parameterizing update rules, neural networks can be used to directly output or modify other neural networks’ parameters. For example, hypernetworks train parameter regression networks end-toend with the task objective. Hypernetworks have subsequently been extended to support sampling different parameter solutions. However, in terms of efficiency, G.pt stands better interms of loss reduction with only single update.   
+
+#### Model-agnostic meta-learning
+
+MAML learns a parameter initialization that is rapidly adaptable to new tasks. Subsequent work has built simple probabilistic models over learned MAML initializations. These methods possess similar characteristics as learned optimizers—they rely on unrolled optimization and require differentiable task-level objectives.
+
+#### Learning hyperparameters 
+
+A large body of prior work has explored learning hyperparameters of standard optimizers. For example, learning rates, weight decays and weight initializations can all be learned via hypergradient descent, Bayesian optimization and reinforcement learning.
+
+#### Effectiveness of Learning to learn as pre-training 
+
+In contrast to learned optimizers, hypernetworks and MAML, G.pt pre-trains from vast amounts of trained neural network checkpoints. This method does not backpropagate through task-level losses and, as a result, does not require the task metric being optimized for to be differentiable. This allow us to train with standard generative modeling techniques instead of reinforcement learning or unrolled optimization which can be unstable.
+
 ## Why G.pt is efficient than other approaches in the community
 
 The paper explores a new direction of utilizing the checkpoint datasets that enable learned optimizer that could effectively learn about the model something everytime it runs through the dataset unlike Adam and SGD optimizers. This paper proposes a simple, scalable and data driven approach which instead of relying on large datasets, makes use of checkpoint datasets unlike other models which tend to rely on unrolled optimizations that could be costly. The following reasons explain why G.pt is most suited for this application. 
@@ -85,4 +107,29 @@ Figure 7: Figure showing the Scaling of the model wrt parameter size and data si
 
 ![](./Figure8.png)
 
-Figure 8: Visualization of the test error landscape for an MNIST MLP via parameter space PCA directions
+Figure 8: Visualization of the test error landscape for an MNIST MLP via parameter space PCA directions.
+
+## Summary
+
+The work overall has demonstrated some great results and efficiency in terms of simplicity, scalability and reliability. The approach demonstrated rapid optimization of neural networks across tasks (supervised and reinforcement learning) and metrics (losses, errors, returns). It addressed stable solution to the learning problem and addressed specifically what makes their approach better. They have also enlisted certain drawbacks their model suffered like signs of underfitting on the dataset, struggling to extrapolate losses and error not present in pre-training data, pretraining only for single architecture and single task data and considering relatively simple datasets of neural networks with static optimizer hyperparameters. Despite these limitations, the model addresses the issues in the community properly and sets up a path for future work in the field.
+
+## References
+1. Sepp Hochreiter, A Steven Younger, and Peter R Conwell. Learning to learn using gradient descent. In ICANN, 2001.
+2. A Steven Younger, Sepp Hochreiter, and Peter R Conwell. Meta-learning with backpropagation. In IJCNN, 2001.
+3. Karol Gregor and Yann LeCun. Learning fast approximations of sparse coding. In ICML, 2010.
+4. Marcin Andrychowicz, Misha Denil, Sergio Gomez, Matthew W Hoffman, David Pfau, Tom Schaul, ´ Brendan Shillingford, and Nando de Freitas. Learning to learn by gradient descent by gradient
+descent. In NeurIPS, 2016.
+5. Sachin Ravi and Hugo Larochelle. Optimization as a model for few-shot learning. In ICLR, 2017.
+6. Olga Wichrowska, Niru Maheswaranathan, Matthew W. Hoffman, Sergio Gomez Colmenarejo, Misha ´ Denil, Nando de Freitas, and Jascha Sohl-Dickstein. Learned optimizers that scale and generalize. In ICML, 2017.
+7. Luke Metz, Niru Maheswaranathan, Jeremy Nixon, Daniel Freeman, and Jascha Sohl-Dickstein. Understanding and correcting pathologies in the training of learned optimizers. In ICML, 2019.
+8. Jurgen Schmidhuber. Learning to control fast-weight memories: An alternative to dynamic recurrent networks. Neural Computation, 1992.
+9. David Krueger, Chin-Wei Huang, Riashat Islam, Ryan Turner, Alexandre Lacoste, and Aaron Courville. Bayesian hypernetworks. arXiv:1710.04759, 2017.
+10. Lior Deutsch, Erik Nijkamp, and Yu Yang. A generative model for sampling high-performance and diverse weights for neural networks. arXiv preprint arXiv:1905.02898, 2019.
+11. Neale Ratzlaff and Li Fuxin. Hypergan: A generative model for diverse, performant neural networks. In ICML, 2019.
+12. Chelsea Finn, Pieter Abbeel, and Sergey Levine. Model-agnostic meta-learning for fast adaptation of deep networks. In ICML, 2017.
+13. James Bergstra, Remi Bardenet, Yoshua Bengio, and Bal azs K egl. Algorithms for hyper-parameter optimization. NeurIPS, 2011.
+14. Dougal Maclaurin, David Duvenaud, and Ryan Adams. Gradient-based hyperparameter optimization through reversible learning. In ICML, 2015.
+15. Harris Drucker and Yann Le Cun. Improving generalization performance using double backpropagation. IEEE Transactions on Neural Networks, 1992.
+16. Jasper Snoek, Hugo Larochelle, and Ryan P Adams. Practical bayesian optimization of machine learning algorithms. NeurIPS, 2012.
+17. Chang Xu, Tao Qin, Gang Wang, and Tie-Yan Liu. Reinforcement learning for learning rate control. arXiv:1705.11159, 2017.
+18. Diogo Almeida, Clemens Winter, Jie Tang, and Wojciech Zaremba. A generalizable approach to learning optimizers. arXiv:2106.00958, 2021.
